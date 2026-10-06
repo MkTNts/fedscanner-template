@@ -46,7 +46,7 @@ Then push it to GitHub and import the repo on [vercel.com/new](https://vercel.co
 No build step and no framework — Vercel serves `index.html` and turns
 `api/scan.js` into a function automatically.
 
-**3. Open the site and fill in the Setup tab.**
+**4. Open the site and fill in the Setup tab.**
 Paste your key and your registered email, then tap **Save and test connection**.
 
 ---

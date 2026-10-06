@@ -81,6 +81,7 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .fi{font-size:13px;margin-bottom:5px;display:flex;align-items:flex-start;gap:6px;font-family:'Georgia',serif;line-height:1.5}
 .fg{color:var(--forest)}
 .fw{color:var(--amber)}
+.fb{color:var(--clay)}
 .qb{font-size:13px;color:var(--quill);line-height:1.7;max-height:130px;overflow-y:auto;background:var(--parch);padding:10px 12px;border-radius:6px;border:1px solid var(--border);font-family:'Georgia',serif;font-style:italic}
 .open-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:var(--twi);color:#fff;border:none;border-radius:8px;padding:14px;font-family:'Georgia',serif;font-size:14px;text-decoration:none;margin-top:14px;min-height:50px}
 .shd{font-size:12px;color:var(--quill);letter-spacing:1px;text-transform:uppercase;margin:14px 0 6px;font-family:'Georgia',serif}
@@ -141,6 +142,11 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
       <input type="email" id="apiEmail" placeholder="the email you registered with USAJOBS" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
       <div class="hint">USAJOBS requires this as the User-Agent. It must match the account the key belongs to.</div>
     </div>
+    <div class="field">
+      <div class="fl">Site access token (only if this site is locked)</div>
+      <input type="password" id="appToken" placeholder="Leave blank unless the site owner gave you one" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
+      <div class="hint">The owner of this site may have locked it with a token. If so, paste it here. It is stored only in this browser.</div>
+    </div>
     <button class="btn-primary" id="testBtn" onclick="testConnection()"><i class="ti ti-plug-connected"></i> Save and test connection</button>
     <div class="btn-row">
       <button class="btn-sm alert" onclick="clearCreds()"><i class="ti ti-trash"></i> Forget key</button>
@@ -156,7 +162,7 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
     <div class="field">
       <div class="fl">Upload (.txt, .md, or .pdf)</div>
       <input type="file" id="resumeFile" accept=".txt,.md,.pdf,text/plain,application/pdf" onchange="handleResumeFile(event)">
-      <div class="hint">Parsed in your browser. The text never leaves this device and is never sent to the scan proxy.</div>
+      <div class="hint">Parsed in your browser and never sent to the scan proxy. It leaves this device only when you tap "Review with AI" on a job, and then only to the AI provider this site uses.</div>
     </div>
     <div class="field">
       <div class="fl">Or paste it here</div>

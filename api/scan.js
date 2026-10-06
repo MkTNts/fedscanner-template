@@ -16,6 +16,8 @@
 // No key is ever committed to this repository, logged, or echoed back in a
 // response. Get your own free key at https://developer.usajobs.gov/apirequest/
 
+const { authorize } = require("./_lib/auth");
+
 const UPSTREAM = "https://data.usajobs.gov/api/search";
 
 // Only these query parameters are forwarded upstream. Anything else the
@@ -42,6 +44,8 @@ const ALLOWED_PARAMS = new Set([
 ]);
 
 module.exports = async function handler(req, res) {
+  if (!authorize(req, res)) return;
+
   const header = (name) => {
     const v = req.headers[name];
     return (Array.isArray(v) ? v[0] : v || "").trim();

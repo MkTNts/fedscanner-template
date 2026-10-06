@@ -5,6 +5,7 @@
 
      localStorage["fedscanner_tpl_key"]     your USAJOBS API key
      localStorage["fedscanner_tpl_email"]   your registered email
+     localStorage["fedscanner_tpl_token"]   the site's access token, if it has one
      localStorage["fedscanner_tpl_profile"] your search criteria
      localStorage["fedscanner_tpl_resume"]  your master resume text
 
@@ -81,13 +82,16 @@ const clrM = () => SCAN_MSGS.forEach((i) => el(i).classList.remove("on"));
 function getCreds() {
   return {
     key: localStorage.getItem(LS + "key") || "",
-    email: localStorage.getItem(LS + "email") || ""
+    email: localStorage.getItem(LS + "email") || "",
+    token: localStorage.getItem(LS + "token") || ""
   };
 }
 
 function saveCreds() {
   const key = el("apiKey").value.trim();
   const email = el("apiEmail").value.trim();
+  const token = el("appToken").value.trim();
+  if (token) localStorage.setItem(LS + "token", token); else localStorage.removeItem(LS + "token");
   if (key) localStorage.setItem(LS + "key", key); else localStorage.removeItem(LS + "key");
   if (email) localStorage.setItem(LS + "email", email); else localStorage.removeItem(LS + "email");
   return { key, email };
@@ -96,8 +100,10 @@ function saveCreds() {
 function clearCreds() {
   localStorage.removeItem(LS + "key");
   localStorage.removeItem(LS + "email");
+  localStorage.removeItem(LS + "token");
   el("apiKey").value = "";
   el("apiEmail").value = "";
+  el("appToken").value = "";
   showIn(["cE", "cO", "cI"], "cI", "Credentials cleared from this browser.");
 }
 
@@ -108,6 +114,8 @@ function authHeaders() {
   const h = {};
   if (c.key) h["x-usajobs-key"] = c.key;
   if (c.email) h["x-usajobs-email"] = c.email;
+  // Percent-encoded because headers only carry Latin-1.
+  if (c.token) h["x-app-token"] = encodeURIComponent(c.token);
   return h;
 }
 
@@ -612,6 +620,7 @@ async function runScan() {
 
         const { score, reasons, warnings, hasReloc, locMatch, signal } = scoreJob(job, profile);
         const pay = job.PositionRemuneration?.[0] || {};
+        const details = job.UserArea?.Details || {};
         allResults.push({
           id, _open: false,
           title: job.PositionTitle,
@@ -623,6 +632,13 @@ async function runScan() {
           url: job.PositionURI,
           qs: job.QualificationSummary || "",
           grade: job.JobGrade?.[0]?.Code || "",
+          // Kept only so the optional AI review can read the full posting.
+          detail: {
+            summary: details.JobSummary || "",
+            duties: details.MajorDuties || [],
+            education: details.Education || "",
+            requirements: details.Requirements || ""
+          },
           score, reasons, warnings, hasReloc, locMatch,
           hiddenSignal: signal.flagged,
           hiddenTerms: signal.terms
@@ -754,9 +770,83 @@ function renderResults(results) {
         ${job.warnings.map((w) => `<div class="fi fw"><i class="ti ti-alert-triangle" style="font-size:14px;flex-shrink:0;margin-top:1px"></i>${eH(w)}</div>`).join("")}
         ${!job.reasons.length ? `<div style="font-size:13px;color:var(--dust);font-style:italic">No specific matches flagged</div>` : ""}
         ${job.qs ? `<div class="dl">Qualification summary</div><div class="qb">${eH(job.qs.slice(0, 600))}${job.qs.length > 600 ? "…" : ""}</div>` : ""}
+        ${renderReview(job)}
         <a class="open-btn" href="${eH(job.url)}" target="_blank" rel="noopener noreferrer"><i class="ti ti-external-link" style="font-size:16px"></i> Open on USAJOBS</a>
       </div>` : ""}
     </div>`).join("");
+}
+
+/* ------------------------------ AI review ------------------------------- */
+
+// Optional. The server decides whether it is turned on; this side only asks.
+// Tapping the button sends this one job and your resume to the AI provider
+// the site owner chose. Nothing is sent until you tap.
+
+const VERDICT_LABEL = { open: "Qualified", stretch: "Stretch", blocked: "Blocked" };
+const VERDICT_CLASS = { open: "fg", stretch: "fw", blocked: "fb" };
+
+function renderReview(job) {
+  if (job.reviewing) {
+    return `<div class="dl">AI review</div><div class="hint">Reading the full posting against your resume… this can take up to a minute.</div>`;
+  }
+  if (job.reviewError) {
+    return `<div class="dl">AI review</div>
+      <div class="fi fw"><i class="ti ti-alert-triangle" style="font-size:14px;flex-shrink:0;margin-top:1px"></i>${eH(job.reviewError)}</div>
+      <button class="btn-sm" onclick="reviewJob('${eH(job.id)}')"><i class="ti ti-refresh"></i> Try again</button>`;
+  }
+  const r = job.review;
+  if (!r) {
+    return `<div class="dl">AI review</div>
+      <button class="btn-sm" onclick="reviewJob('${eH(job.id)}')"><i class="ti ti-sparkles"></i> Review with AI</button>
+      <div class="hint">Sends this posting and your resume to the AI provider this site uses. Nothing is sent until you tap.</div>`;
+  }
+  const li = (cls, icon, t) =>
+    `<div class="fi ${cls}"><i class="ti ti-${icon}" style="font-size:14px;flex-shrink:0;margin-top:1px"></i>${eH(t)}</div>`;
+  return `<div class="dl">AI review</div>
+    <div class="fi ${VERDICT_CLASS[r.verdict] || "fw"}" style="font-weight:bold">${eH(VERDICT_LABEL[r.verdict] || r.verdict)} · referral odds: ${eH(r.odds)}</div>
+    ${r.summary ? `<div class="qb" style="font-style:normal">${eH(r.summary)}</div>` : ""}
+    ${r.blockers.map((b) => li("fb", "ban", `${b.requirement} — ${b.why}`)).join("")}
+    ${r.strengths.map((t) => li("fg", "check", t)).join("")}
+    ${r.gaps.map((t) => li("fw", "alert-triangle", t)).join("")}
+    <div class="hint">Reviewed by ${eH(r.model || "AI")}. AI can be wrong — read the posting before you apply.</div>`;
+}
+
+async function reviewJob(id) {
+  const job = allResults.find((x) => x.id === id);
+  if (!job || job.reviewing) return;
+  const resume = localStorage.getItem(LS + "resume") || "";
+  if (!resume.trim()) {
+    job.reviewError = "Add your resume on the Setup tab first. The review compares this job against it.";
+    reRender();
+    return;
+  }
+  job.reviewing = true;
+  job.reviewError = "";
+  reRender();
+  try {
+    const res = await fetch("/api/review", {
+      method: "POST",
+      headers: { "content-type": "application/json", ...authHeaders() },
+      body: JSON.stringify({
+        resume,
+        job: {
+          title: job.title,
+          org: job.org,
+          grade: job.grade,
+          locations: job.locs,
+          qualifications: job.qs,
+          ...job.detail
+        }
+      })
+    });
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(body.error || `HTTP ${res.status}`);
+    job.review = body;
+  } catch (e) {
+    job.reviewError = e.message;
+  }
+  job.reviewing = false;
+  reRender();
 }
 
 /* -------------------------------- startup ------------------------------- */
@@ -765,6 +855,7 @@ function renderResults(results) {
   const c = getCreds();
   el("apiKey").value = c.key;
   el("apiEmail").value = c.email;
+  el("appToken").value = c.token;
   el("resumeText").value = localStorage.getItem(LS + "resume") || "";
   renderProfileForm();
 

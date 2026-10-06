@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>FedScanner Template</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+:root{
+  --clay:#a2423d;--clay-lt:#f3e8e7;--clay-dk:#7a2f2b;
+  --parch:#eae6e1;--paper:#f5f1ec;
+  --twi:#164e63;--twi-lt:#dce8ed;
+  --stone:#b2ac88;--wood:#d4c9a8;
+  --ink:#2c1a16;--quill:#5c4535;--dust:#8a7a6a;
+  --forest:#2d6a4f;--forest-lt:#d4ede3;
+  --amber:#7a5c14;--amber-lt:#f5edcf;
+  --border:#cdc8bc;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{font-family:'Georgia',serif;font-size:15px;color:var(--ink);background:var(--parch);width:100%;overflow-x:hidden}
+.hdr{background:var(--twi);padding:14px 16px;border-bottom:3px solid var(--clay);display:flex;align-items:center;justify-content:space-between}
+.hdr-l{display:flex;align-items:center;gap:10px}
+.hdr-title{font-size:18px;color:var(--wood);font-family:'Georgia',serif;font-weight:normal}
+.hdr-badge{background:rgba(178,172,136,.2);border:1px solid var(--stone);border-radius:3px;padding:3px 8px;font-size:10px;color:var(--stone);font-family:'Georgia',serif;letter-spacing:.5px}
+.main{padding:14px 14px 40px}
+.card{background:var(--paper);border:1px solid var(--border);border-radius:6px;padding:14px;margin-bottom:12px;box-shadow:0 1px 4px rgba(44,26,22,.07)}
+.card-lbl{font-size:11px;color:var(--clay);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:6px;font-family:'Georgia',serif}
+.card-lbl::after{content:'';flex:1;height:1px;background:var(--wood)}
+.field{margin-bottom:12px}
+.field:last-of-type{margin-bottom:0}
+.fl{font-size:13px;color:var(--quill);margin-bottom:6px;font-family:'Georgia',serif}
+.hint{font-size:12px;color:var(--dust);font-style:italic;margin-top:4px;line-height:1.5}
+input,select,textarea{width:100%;background:var(--parch);border:1px solid var(--stone);border-radius:6px;padding:12px 14px;color:var(--ink);font-family:'Georgia',serif;font-size:15px;outline:none;-webkit-appearance:none;appearance:none}
+input:focus,select:focus,textarea:focus{border-color:var(--clay);background:#fff}
+textarea{min-height:96px;line-height:1.6;resize:vertical;font-size:14px}
+input[type=file]{padding:10px;font-size:13px;background:var(--paper)}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235c4535' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+.check{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--quill)}
+.check input{width:auto;flex-shrink:0;width:20px;height:20px;-webkit-appearance:checkbox;appearance:checkbox}
+.btn-primary{width:100%;background:var(--clay);color:#fff;border:none;border-radius:8px;padding:15px;font-family:'Georgia',serif;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;min-height:52px}
+.btn-primary:active{background:var(--clay-dk)}
+.btn-primary:disabled{background:var(--stone);cursor:not-allowed}
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.btn-sm{background:transparent;border:1px solid var(--stone);color:var(--quill);border-radius:8px;padding:12px;font-family:'Georgia',serif;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;min-height:46px}
+.btn-sm.alert{border-color:var(--clay);color:var(--clay)}
+.msg{border-radius:6px;padding:10px 13px;font-size:13px;margin-top:10px;display:none;align-items:flex-start;gap:8px;font-family:'Georgia',serif;line-height:1.5}
+.msg.on{display:flex}
+.me{background:var(--clay-lt);color:var(--clay-dk);border:1px solid var(--clay)}
+.mo{background:var(--forest-lt);color:var(--forest);border:1px solid var(--forest)}
+.mw{background:var(--amber-lt);color:var(--amber);border:1px solid var(--amber)}
+.mi{background:var(--twi-lt);color:var(--twi);border:1px solid var(--twi)}
+.prog{display:none;margin-bottom:12px}
+.prog.on{display:block}
+.prog-lbl{font-size:12px;color:var(--quill);font-style:italic;margin-bottom:6px;font-family:'Georgia',serif;display:flex;justify-content:space-between}
+.pb{background:var(--wood);border-radius:3px;height:6px}
+.pf{background:var(--clay);height:100%;border-radius:3px;width:0%;transition:width .3s}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.stat{background:var(--paper);border:1px solid var(--border);border-radius:6px;padding:10px 4px;text-align:center;display:none}
+.stat.on{display:block}
+.stat-n{font-size:20px;font-family:'Georgia',serif}
+.stat-l{font-size:10px;color:var(--dust);margin-top:2px;font-family:'Georgia',serif;line-height:1.3}
+.res-hd{font-size:13px;color:var(--quill);font-style:italic;margin-bottom:10px;display:none;border-left:3px solid var(--clay);padding-left:8px;font-family:'Georgia',serif}
+.jcard{background:var(--paper);border:1px solid var(--border);border-radius:8px;margin-bottom:10px;overflow:hidden;box-shadow:0 1px 4px rgba(44,26,22,.06)}
+.jrow{padding:13px 14px;cursor:pointer;display:flex;align-items:flex-start;gap:10px}
+.jnum{font-size:12px;color:var(--stone);min-width:20px;padding-top:2px;font-family:'Georgia',serif}
+.jmain{flex:1;min-width:0}
+.jtitle{font-size:14px;color:var(--ink);font-family:'Georgia',serif;line-height:1.4;margin-bottom:3px}
+.jorg{font-size:12px;color:var(--dust);font-style:italic;font-family:'Georgia',serif;margin-bottom:6px}
+.jmeta{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.jsal{font-size:13px;color:var(--twi);font-family:'Georgia',serif}
+.bdg{display:inline-block;padding:2px 7px;border-radius:3px;font-size:11px;font-family:'Georgia',serif}
+.by{background:var(--forest-lt);color:var(--forest);border:1px solid var(--forest)}
+.bw{background:var(--amber-lt);color:var(--amber);border:1px solid var(--amber)}
+.bi{background:var(--twi-lt);color:var(--twi);border:1px solid var(--twi)}
+.jscore{text-align:center;min-width:54px;flex-shrink:0}
+.sc{font-size:22px;font-family:'Georgia',serif}
+.sl{font-size:10px;letter-spacing:.3px;font-family:'Georgia',serif}
+.jtog{font-size:12px;color:var(--stone);margin-top:4px}
+.jdet{padding:0 14px 14px;border-top:1px solid var(--wood)}
+.dl{font-size:11px;color:var(--clay);letter-spacing:1px;text-transform:uppercase;margin:12px 0 6px;font-family:'Georgia',serif}
+.fi{font-size:13px;margin-bottom:5px;display:flex;align-items:flex-start;gap:6px;font-family:'Georgia',serif;line-height:1.5}
+.fg{color:var(--forest)}
+.fw{color:var(--amber)}
+.qb{font-size:13px;color:var(--quill);line-height:1.7;max-height:130px;overflow-y:auto;background:var(--parch);padding:10px 12px;border-radius:6px;border:1px solid var(--border);font-family:'Georgia',serif;font-style:italic}
+.open-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:var(--twi);color:#fff;border:none;border-radius:8px;padding:14px;font-family:'Georgia',serif;font-size:14px;text-decoration:none;margin-top:14px;min-height:50px}
+.shd{font-size:12px;color:var(--quill);letter-spacing:1px;text-transform:uppercase;margin:14px 0 6px;font-family:'Georgia',serif}
+.dbg-item{padding:10px 12px;border-bottom:1px solid var(--wood);font-family:'Georgia',serif}
+.dbg-item:last-child{border-bottom:none}
+.dbg-title{font-size:13px;color:var(--ink);margin-bottom:3px}
+.dbg-reason{font-size:12px;color:var(--clay)}
+.chip{display:inline-block;border-radius:14px;padding:6px 12px;font-size:13px;border:1px solid var(--border);color:var(--quill);background:var(--parch);font-family:'Georgia',serif;margin:0 5px 6px 0;cursor:pointer}
+.chip.on{border-color:var(--forest);color:var(--forest);background:var(--forest-lt)}
+.chip .n{font-size:11px;color:var(--dust);margin-left:4px}
+.chip.on .n{color:var(--forest)}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:var(--stone);border-radius:2px}
+.tabs{display:flex;gap:6px;padding:10px 14px 0;background:var(--parch)}
+.tab{flex:1;text-align:center;padding:11px 6px;border-radius:8px 8px 0 0;font-size:12px;font-family:'Georgia',serif;letter-spacing:.3px;cursor:pointer;border:1px solid var(--border);border-bottom:none;background:var(--paper);color:var(--dust);display:flex;flex-direction:column;align-items:center;gap:3px}
+.tab i{font-size:16px}
+.tab.active{color:#fff;font-weight:bold}
+.tab.t-setup.active{background:var(--twi);border-color:var(--twi)}
+.tab.t-prof.active{background:var(--amber);border-color:var(--amber)}
+.tab.t-scan.active{background:var(--clay);border-color:var(--clay)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+.sys-card{border-left:4px solid transparent}
+.sys-setup{border-left-color:var(--twi)}
+.sys-prof{border-left-color:var(--amber)}
+.sys-scan{border-left-color:var(--clay)}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-l">
+    <i class="ti ti-radar" style="font-size:22px;color:var(--wood)"></i>
+    <div class="hdr-title">FedScanner</div>
+  </div>
+  <div class="hdr-badge">TEMPLATE</div>
+</div>
+
+<div class="tabs">
+  <div class="tab t-setup active" id="tab-setup" onclick="switchTab('setup')"><i class="ti ti-key"></i>Setup</div>
+  <div class="tab t-prof" id="tab-prof" onclick="switchTab('prof')"><i class="ti ti-adjustments"></i>Criteria</div>
+  <div class="tab t-scan" id="tab-scan" onclick="switchTab('scan')"><i class="ti ti-search"></i>Scan</div>
+</div>
+
+<div class="main">
+
+<!-- ============================ SETUP ============================ -->
+<div class="tab-panel active" id="panel-setup">
+
+  <div class="card sys-card sys-setup">
+    <div class="card-lbl"><i class="ti ti-key" style="font-size:13px"></i> USAJOBS credentials</div>
+    <div class="field">
+      <div class="fl">API key</div>
+      <input type="password" id="apiKey" placeholder="Paste your USAJOBS API key" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
+      <div class="hint">Request a free key at developer.usajobs.gov/apirequest. It is stored only in this browser and sent only to the USAJOBS proxy on this site.</div>
+    </div>
+    <div class="field">
+      <div class="fl">Registered email</div>
+      <input type="email" id="apiEmail" placeholder="the email you registered with USAJOBS" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
+      <div class="hint">USAJOBS requires this as the User-Agent. It must match the account the key belongs to.</div>
+    </div>
+    <button class="btn-primary" id="testBtn" onclick="testConnection()"><i class="ti ti-plug-connected"></i> Save and test connection</button>
+    <div class="btn-row">
+      <button class="btn-sm alert" onclick="clearCreds()"><i class="ti ti-trash"></i> Forget key</button>
+      <button class="btn-sm" onclick="switchTab('prof')"><i class="ti ti-arrow-right"></i> Set criteria</button>
+    </div>
+    <div id="cE" class="msg me"><i class="ti ti-alert-circle"></i><span id="cET"></span></div>
+    <div id="cO" class="msg mo"><i class="ti ti-circle-check"></i><span id="cOT"></span></div>
+    <div id="cI" class="msg mi"><i class="ti ti-info-circle"></i><span id="cIT"></span></div>
+  </div>
+
+  <div class="card sys-card sys-setup">
+    <div class="card-lbl"><i class="ti ti-file-text" style="font-size:13px"></i> Master resume</div>
+    <div class="field">
+      <div class="fl">Upload (.txt, .md, or .pdf)</div>
+      <input type="file" id="resumeFile" accept=".txt,.md,.pdf,text/plain,application/pdf" onchange="handleResumeFile(event)">
+      <div class="hint">Parsed in your browser. The text never leaves this device and is never sent to the scan proxy.</div>
+    </div>
+    <div class="field">
+      <div class="fl">Or paste it here</div>
+      <textarea id="resumeText" placeholder="Paste your master resume text…" oninput="saveResume()"></textarea>
+    </div>
+    <button class="btn-primary" onclick="extractResumeKeywords()"><i class="ti ti-wand"></i> Suggest keywords from resume</button>
+    <div id="rE" class="msg me"><i class="ti ti-alert-circle"></i><span id="rET"></span></div>
+    <div id="rO" class="msg mo"><i class="ti ti-circle-check"></i><span id="rOT"></span></div>
+    <div id="kwPick" style="display:none">
+      <div class="shd">Tap to select — these become your scoring keywords</div>
+      <div id="kwChips"></div>
+      <div class="btn-row">
+        <button class="btn-sm" onclick="applyResumeKeywords(false)"><i class="ti ti-plus"></i> Add to criteria</button>
+        <button class="btn-sm alert" onclick="applyResumeKeywords(true)"><i class="ti ti-refresh"></i> Replace criteria</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card sys-card sys-setup">
+    <div class="card-lbl"><i class="ti ti-file-import" style="font-size:13px"></i> Criteria file</div>
+    <div class="field">
+      <div class="fl">Import a profile (.json)</div>
+      <input type="file" id="profFile" accept=".json,application/json" onchange="importProfile(event)">
+      <div class="hint">Profiles never contain credentials, so they are safe to share with someone else.</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-sm" onclick="exportProfile()"><i class="ti ti-download"></i> Export profile</button>
+      <button class="btn-sm alert" onclick="resetProfile()"><i class="ti ti-rotate"></i> Reset to example</button>
+    </div>
+    <div id="pE" class="msg me"><i class="ti ti-alert-circle"></i><span id="pET"></span></div>
+    <div id="pO" class="msg mo"><i class="ti ti-circle-check"></i><span id="pOT"></span></div>
+  </div>
+
+</div>
+
+<!-- ============================ CRITERIA ============================ -->
+<div class="tab-panel" id="panel-prof">
+  <div class="card sys-card sys-prof">
+    <div class="card-lbl"><i class="ti ti-adjustments" style="font-size:13px"></i> Who you are</div>
+    <div class="field">
+      <div class="fl">Profile name</div>
+      <input type="text" id="pName" placeholder="e.g. Program analyst, Pacific">
+    </div>
+    <div class="field">
+      <div class="fl">Target location <span style="color:var(--dust);font-size:12px">(optional)</span></div>
+      <input type="text" id="pLoc" placeholder="e.g. Denver, Colorado — or Germany">
+      <div class="hint">Passed to USAJOBS as LocationName and used for location scoring. Blank means nationwide.</div>
+    </div>
+    <div class="field">
+      <div class="fl">Minimum salary</div>
+      <input type="number" id="pMinSal" placeholder="30000" inputmode="numeric">
+    </div>
+    <div class="field">
+      <label class="check"><input type="checkbox" id="pHourly"> Drop hourly-rate positions</label>
+    </div>
+  </div>
+
+  <div class="card sys-card sys-prof">
+    <div class="card-lbl"><i class="ti ti-list-numbers" style="font-size:13px"></i> What to search</div>
+    <div class="field">
+      <div class="fl">Occupational series — one per line</div>
+      <textarea id="pSeries" placeholder="0343 Management &amp; program analysis"></textarea>
+      <div class="hint">Format: four-digit code, then a label. Find codes at usajobs.gov/help/faq/job-announcement/job-series. A posting in a series you do not list is never requested at all.</div>
+    </div>
+    <div class="field">
+      <div class="fl">Keyword searches — one per line</div>
+      <textarea id="pKeywords" placeholder="program analyst"></textarea>
+      <div class="hint">Full-text searches run alongside the series searches. Good for roles that hide in unexpected series.</div>
+    </div>
+  </div>
+
+  <div class="card sys-card sys-prof">
+    <div class="card-lbl"><i class="ti ti-star" style="font-size:13px"></i> How to score</div>
+    <div class="field">
+      <div class="fl">Profile keywords — one per line</div>
+      <textarea id="pProfileKw" placeholder="analyst"></textarea>
+      <div class="hint">Matches in the title score heavily, matches in the duties score lightly. The resume tool on the Setup tab fills this in for you.</div>
+    </div>
+    <div class="field">
+      <div class="fl">Preferred organizations — one per line</div>
+      <textarea id="pOrgs" placeholder="defense"></textarea>
+    </div>
+    <div class="field">
+      <div class="fl">Relocation phrases — one per line</div>
+      <textarea id="pReloc" placeholder="relocation authorized"></textarea>
+    </div>
+    <div class="field">
+      <div class="fl">Hidden-location signals — one per line</div>
+      <textarea id="pSignals" placeholder="oconus"></textarea>
+      <div class="hint">Terms that reveal a job is really based at your target location even when the listing shows an HQ address elsewhere.</div>
+    </div>
+  </div>
+
+  <div class="card sys-card sys-prof">
+    <div class="card-lbl"><i class="ti ti-filter-off" style="font-size:13px"></i> What to reject</div>
+    <div class="field">
+      <div class="fl">Excluded title words — one per line</div>
+      <textarea id="pExTitle" placeholder=" engineer "></textarea>
+      <div class="hint">Matched as plain substrings of the title. Pad short words with spaces so "cook" does not also reject "cookie".</div>
+    </div>
+    <div class="field">
+      <div class="fl">Excluded requirements — one per line</div>
+      <textarea id="pExSumm" placeholder="juris doctor"></textarea>
+    </div>
+    <div class="field">
+      <div class="fl">Excluded degree fields — one per line</div>
+      <textarea id="pExField" placeholder="degree in nursing"></textarea>
+    </div>
+    <button class="btn-primary" onclick="saveProfileForm()"><i class="ti ti-device-floppy"></i> Save criteria</button>
+    <div id="sE" class="msg me"><i class="ti ti-alert-circle"></i><span id="sET"></span></div>
+    <div id="sO" class="msg mo"><i class="ti ti-circle-check"></i><span id="sOT"></span></div>
+  </div>
+</div>
+
+<!-- ============================ SCAN ============================ -->
+<div class="tab-panel" id="panel-scan">
+  <div class="card sys-card sys-scan">
+    <div class="card-lbl"><i class="ti ti-search" style="font-size:13px"></i> Run a scan</div>
+    <div class="field">
+      <div class="fl">Relocation filter</div>
+      <select id="relocMode" onchange="reRender()">
+        <option value="all">Show all</option>
+        <option value="hard">Confirmed relocation only</option>
+      </select>
+    </div>
+    <div class="field">
+      <div class="fl">Minimum score</div>
+      <select id="minScore" onchange="reRender()">
+        <option value="0">Show everything</option>
+        <option value="40">40+ good fit and above</option>
+        <option value="60">60+ strong fit only</option>
+      </select>
+    </div>
+    <button class="btn-primary" id="sBtn" onclick="runScan()"><i class="ti ti-player-play"></i> Launch scan</button>
+    <div class="btn-row" id="secBtns" style="display:none">
+      <button class="btn-sm alert" id="aBtn" onclick="aborted=true" style="display:none"><i class="ti ti-player-stop"></i> Stop</button>
+      <button class="btn-sm" id="dBtn" onclick="toggleDbg()" style="display:none"><i class="ti ti-list-details"></i> Show filtered</button>
+    </div>
+    <div id="mE" class="msg me"><i class="ti ti-alert-circle"></i><span id="mET"></span></div>
+    <div id="mO" class="msg mo"><i class="ti ti-circle-check"></i><span id="mOT"></span></div>
+    <div id="mW" class="msg mw"><i class="ti ti-alert-triangle"></i><span id="mWT"></span></div>
+    <div id="mI" class="msg mi"><i class="ti ti-info-circle"></i><span id="mIT"></span></div>
+  </div>
+
+  <div class="prog" id="prog">
+    <div class="prog-lbl"><span id="pT"></span><span id="pC"></span></div>
+    <div class="pb"><div class="pf" id="pF"></div></div>
+  </div>
+
+  <div class="stats">
+    <div class="stat" id="m1"><div class="stat-n" id="n1">0</div><div class="stat-l">Fetched</div></div>
+    <div class="stat" id="m2"><div class="stat-n" id="n2">0</div><div class="stat-l">Unique</div></div>
+    <div class="stat" id="m3"><div class="stat-n" id="n3">0</div><div class="stat-l">Filtered</div></div>
+    <div class="stat" id="m4"><div class="stat-n" id="n4">0</div><div class="stat-l">Matched</div></div>
+  </div>
+
+  <div class="res-hd" id="rH"></div>
+  <div id="rL"></div>
+  <div class="card" id="dPanel" style="display:none;padding:0"><div id="dBody"></div></div>
+</div>
+
+</div>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+{
+  "profileName": "Example — program analyst, nationwide",
+  "location": "",
+  "minSalary": 30000,
+  "excludeHourly": true,
+  "series": [
+    { "code": "0343", "lbl": "Management & program analysis" },
+    { "code": "0301", "lbl": "Misc administration & program" },
+    { "code": "0201", "lbl": "Human resources management" }
+  ],
+  "keywords": [
+    "program analyst",
+    "management analyst"
+  ],
+  "profileKeywords": [
+    "program",
+    "analyst",
+    "management",
+    "planning",
+    "operations",
+    "policy",
+    "budget",
+    "compliance",
+    "reporting",
+    "evaluation"
+  ],
+  "preferredOrgs": [
+    "defense",
+    "veterans affairs"
+  ],
+  "excludeTitles": [
+    " engineer ",
+    " nurse ",
+    " attorney "
+  ],
+  "excludeSummary": [
+    "phd required",
+    "doctoral degree",
+    "juris doctor",
+    "medical degree",
+    "registered nurse"
+  ],
+  "excludeFields": [
+    "degree in engineering",
+    "degree in nursing"
+  ],
+  "relocationPhrases": [
+    "relocation expense",
+    "relocation authorized",
+    "relocation incentive",
+    "relocation reimburs",
+    "permanent change of station",
+    "moving expense",
+    "pcs authorized"
+  ],
+  "locationSignals": [],
+  "scoring": {
+    "relocation": 20,
+    "titleKeyword": 6,
+    "titleKeywordMax": 30,
+    "summaryKeyword": 2,
+    "summaryKeywordMax": 20,
+    "preferredOrg": 15,
+    "locationMatch": 20,
+    "hiddenLocationSignal": 15
+  }
+}

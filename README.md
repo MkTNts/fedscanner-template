@@ -33,16 +33,16 @@ criteria, and no resume. You supply all three on first run.
 Request one free at [developer.usajobs.gov/apirequest](https://developer.usajobs.gov/apirequest/).
 It arrives by email, usually within a day.
 
-**2. Deploy it.**
+**2. Get your own copy.**
 
-```bash
-# copy the template into a fresh repo of your own
-cp -r template/. /path/to/your-new-repo/
-cd /path/to/your-new-repo
-git init && git add -A && git commit -m "FedScanner from template"
-```
+At the top of this repo on GitHub, tap **Use this template → Create a new
+repository**. If that button isn't shown, tap **Fork** instead. Either way you
+end up with a repo of your own that you can change freely.
 
-Then push it to GitHub and import the repo on [vercel.com/new](https://vercel.com/new).
+**3. Deploy it.**
+
+Import your new repo on [vercel.com/new](https://vercel.com/new) and tap
+**Deploy**. Leave every setting at its default.
 No build step and no framework — Vercel serves `index.html` and turns
 `api/scan.js` into a function automatically.
 

@@ -72,15 +72,23 @@ The GitHub phone app does not have the button you need.
 3. Near the top right, tap the green **Use this template** button.
 4. Tap **Create a new repository**.
 5. In **Repository name**, type `fedscanner`.
-6. Choose **Public** or **Private**. Either works.
+6. Choose **Private**. ⚠️ **Do not skip this.**
 7. Tap **Create repository**.
 
 You now have your own copy. A *repository* is just GitHub's word for a
 project folder.
 
+> **Why private?** A public repository can be read by anyone on the internet.
+> Your copy holds no secrets today. But if you ever change it, a private
+> repository keeps any mistake out of public view.
+
 > **Can't see "Use this template"?** On a phone, turn your screen sideways
-> or switch your browser to **Desktop site**. If it is still missing, tap
-> **Fork**, then **Create fork**. That works just as well.
+> or switch your browser to **Desktop site**. Still missing? Open
+> **[this link](https://github.com/MkTNts/fedscanner-template/generate)** instead.
+> It goes straight to the same screen.
+>
+> **Do not use the Fork button.** GitHub does not let a fork of a public
+> repository be made private.
 
 ---
 
@@ -164,6 +172,46 @@ That's it. Come back any time and tap **Launch scan** again.
 
 ---
 
+## Keep it safe
+
+Your **API key** works like a password. Treat it the same way.
+
+**Do these once, during setup:**
+
+- ✅ Make your GitHub copy **Private**. Step 3 covers this.
+- ✅ Turn on **two-factor sign-in** for GitHub and for Vercel.
+  It is under **Settings → Password and authentication** on GitHub.
+  On Vercel, look under **Account Settings → Authentication**.
+
+**Rules to follow every time:**
+
+- ❌ **Never type your API key into a file on GitHub.**
+  The only places it belongs are the **Setup** tab of your website, or
+  Vercel's **Environment Variables** screen if you choose that option.
+- ❌ **Never email, text, or post your API key** to anyone.
+- ✅ On a **shared or public computer**, tap **Forget key** on the Setup tab
+  when you finish.
+- ✅ Want to share your criteria with a friend? Use **Export profile**.
+  That file never contains your key or your resume.
+
+**Sharing your website link:**
+
+Your link is safe to share **as long as you only typed your key on the Setup
+tab**. Each visitor must paste their own key, and nobody can see yours.
+
+There is one exception. If you put your key into Vercel's **Environment
+Variables** screen, **keep your link to yourself**. Anyone with the link would
+then be searching on your key.
+
+**If your key ever leaks:**
+
+1. Stop using it.
+2. Request a new key at
+   [developer.usajobs.gov/apirequest](https://developer.usajobs.gov/apirequest/).
+3. Paste the new key on the Setup tab.
+
+---
+
 ## Something went wrong?
 
 **"Connected" never appears.**
@@ -195,7 +243,7 @@ Settings are saved in each browser separately. Before switching, tap
 | **API key** | A password that lets a program search USAJOBS for you |
 | **Repository** | A project folder stored on GitHub |
 | **Template** | A starting copy you can make your own |
-| **Fork** | Another way to make your own copy on GitHub |
+| **Fork** | A linked copy on GitHub. Avoid it here, because it cannot be made private |
 | **Deploy** | Turning files into a live website |
 | **Series** | The four-digit number that groups federal jobs by type of work |
 
@@ -240,7 +288,8 @@ Use this when you are **sharing the deployed link** with other people.
 Set `USAJOBS_API_KEY` and `USAJOBS_EMAIL` in your Vercel project settings.
 The proxy uses them and visitors never see a key prompt.
 
-Use this when the deployment is **only for you**.
+Use this when the deployment is **only for you**. Do not share the URL: every
+visitor would be searching on your key and your rate limit.
 
 The server key always wins if both are present. Either way, no key is ever
 written into the page, logged, or echoed back in a response.
@@ -319,6 +368,12 @@ series into several targeted keyword searches.
 ---
 
 ## Security notes
+
+- Keep your copy of this repository **private**. Create it with
+  **Use this template**, not **Fork**: a fork of a public repository cannot be
+  made private.
+- Enable two-factor authentication on GitHub and Vercel. Whoever controls
+  those accounts controls the deployed site and its environment variables.
 
 - Credentials are sent as `x-usajobs-key` and `x-usajobs-email` headers, so
   they stay out of server access logs and browser history.
